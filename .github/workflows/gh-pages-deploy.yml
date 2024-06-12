@@ -4,7 +4,10 @@ on:  # Defines the event that triggers the workflow
   push:  # The workflow is triggered when code is pushed
     branches: ["main"]  # The workflow is triggered when code is pushed to the main branch
   workflow_dispatch:  # The workflow can also be triggered manually
-
+    inputs:
+      headerTitle:
+        description: 'Header Title'  # Description of the input
+        required: true  # The input is required
 permissions:  # Defines the permissions for the GitHub token used in this workflow
   contents: read  # Read access to the repository contents
   pages: write  # Write access to pages
@@ -25,6 +28,8 @@ jobs:  # Defines the jobs in the workflow
       - name: Install dependencies  # Name of the third step
         run: npm install  # Installs the project dependencies
       - name: Build  # Name of the fourth step
+        env:  # Defines environment variables for this step
+          REACT_APP_HEADER: ${{ github.event.inputs.headerTitle || 'Default Header' }}  # Sets the REACT_APP_HEADER environment variable to the value of the headerTitle input if it's set, otherwise uses 'Default Header'
         run: npm run build  # Builds the project
       - name: Setup Pages  # Name of the fifth step
         uses: actions/configure-pages@v5  # Sets up GitHub Pages for the project
