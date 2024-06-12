@@ -1,0 +1,27 @@
+name: Deploy to GitHub Pages  # Name of the workflow
+
+on:  # Defines the event that triggers the workflow
+  pull_request:  # The workflow is triggered when a pull request is opened, synchronized, or reopened
+    branches: ["main"]  # The workflow is triggered when a pull request is made to the main branch
+
+permissions:  # Defines the permissions for the GitHub token used in this workflow
+  contents: read  # Read access to the repository contents
+  pages: write  # Write access to pages
+  id-token: write  # Write access to id-token
+
+concurrency:  # Ensures that only one job or workflow using the same concurrency group will run at a time
+  group: "pages"  # Name of the concurrency group
+  cancel-in-progress: false  # If another job or workflow using the "pages" concurrency group starts, it will be pending until the running job finishes
+
+jobs:  # Defines the jobs in the workflow
+  build:  # Name of the first job
+    runs-on: ubuntu-latest  # The job runs on the latest version of Ubuntu
+    steps:  # Defines the steps in the job
+      - name: Checkout  # Name of the first step
+        uses: actions/checkout@v4  # Checks out your repository
+      - name: Setup Node.js environment  # Name of the second step
+        uses: actions/setup-node@v4.0.2  # Sets up a Node.js environment on the runner
+      - name: Install dependencies  # Name of the third step
+        run: npm install  # Installs the project dependencies
+      - name: Run tests  # Name of the fourth step
+        run: npm test  # Runs the tests

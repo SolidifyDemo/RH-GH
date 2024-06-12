@@ -1,49 +1,48 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages  # Name of the workflow
 
-on:
-  push:
-    branches: ["main"]
+on:  # Defines the event that triggers the workflow
+  push:  # The workflow is triggered when code is pushed
+    branches: ["main"]  # The workflow is triggered when code is pushed to the main branch
+  workflow_dispatch:  # The workflow can also be triggered manually
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+permissions:  # Defines the permissions for the GitHub token used in this workflow
+  contents: read  # Read access to the repository contents
+  pages: write  # Write access to pages
+  id-token: write  # Write access to id-token
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+concurrency:  # Ensures that only one job or workflow using the same concurrency group will run at a time
+  group: "pages"  # Name of the concurrency group
+  cancel-in-progress: false  # If another job or workflow using the "pages" concurrency group starts, it will be pending until the running job finishes
 
-jobs:
-  # Build job
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4.0.2
-      - name: Install dependencies
-        run: npm install
-      - name: Build
-        run: npm run build
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./build
-          destination: ./_site
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+jobs:  # Defines the jobs in the workflow
+  build:  # Name of the first job
+    runs-on: ubuntu-latest  # The job runs on the latest version of Ubuntu
+    steps:  # Defines the steps in the job
+      - name: Checkout  # Name of the first step
+        uses: actions/checkout@v4  # Checks out your repository
+      - name: Setup Node.js environment  # Name of the second step
+        uses: actions/setup-node@v4.0.2  # Sets up a Node.js environment on the runner
+      - name: Install dependencies  # Name of the third step
+        run: npm install  # Installs the project dependencies
+      - name: Build  # Name of the fourth step
+        run: npm run build  # Builds the project
+      - name: Setup Pages  # Name of the fifth step
+        uses: actions/configure-pages@v5  # Sets up GitHub Pages for the project
+      - name: Build with Jekyll  # Name of the sixth step
+        uses: actions/jekyll-build-pages@v1  # Builds the site with Jekyll
+        with:  # Specifies the parameters for the action
+          source: ./build  # The source directory
+          destination: ./_site  # The destination directory
+      - name: Upload artifact  # Name of the seventh step
+        uses: actions/upload-pages-artifact@v3  # Uploads the build artifact (the _site directory)
 
-  # Deployment job
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+  deploy:  # Name of the second job
+    environment:  # Defines the environment for the job
+      name: github-pages  # Name of the environment
+      url: ${{ steps.deployment.outputs.page_url }}  # The URL of the deployed site
+    runs-on: ubuntu-latest  # The job runs on the latest version of Ubuntu
+    needs: build  # The job depends on the build job
+    steps:  # Defines the steps in the job
+      - name: Deploy to GitHub Pages  # Name of the first step
+        id: deployment  # The ID of the step
+        uses: actions/deploy-pages@v4  # Deploys the site to GitHub Pages
