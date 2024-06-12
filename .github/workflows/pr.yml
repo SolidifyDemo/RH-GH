@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages  # Name of the workflow
+name: Deploy to GitHub Page  # Name of the workflow
 
 on:  # Defines the event that triggers the workflow
   pull_request:  # The workflow is triggered when a pull request is opened, synchronized, or reopened
