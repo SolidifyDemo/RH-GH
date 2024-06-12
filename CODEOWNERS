@@ -1,0 +1,6 @@
+# This is a CODEOWNERS file.
+# You are the default owner for everything in the repo.
+* @RickardHF
+
+# The other person is the owner of all workflow files.
+/.github/workflows/* @magnuskiro
